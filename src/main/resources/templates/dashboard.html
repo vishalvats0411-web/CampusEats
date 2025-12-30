@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head><title>Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="container mt-5">
+<h2>Incoming Orders</h2>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Order ID</th>
+        <th>User</th>
+        <th>Items</th>
+        <th>Total</th>
+        <th>Status</th>
+        <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.id}"></td>
+        <td th:text="${order.user.name} + ' (' + ${order.user.collegeId} + ')'"></td>
+        <td>
+            <ul class="list-unstyled">
+                <li th:each="item : ${order.orderItems}"
+                    th:text="${item.itemName} + ' x' + ${item.quantity}"></li>
+            </ul>
+        </td>
+        <td th:text="'₹' + ${order.totalAmount}"></td>
+        <td>
+            <span class="badge bg-warning" th:text="${order.status}"></span>
+        </td>
+        <td>
+            <form th:action="@{/admin/order/{id}/status(id=${order.id})}" method="post" class="d-flex gap-2">
+                <button name="status" value="PREPARING" class="btn btn-sm btn-primary">Prepare</button>
+                <button name="status" value="READY" class="btn btn-sm btn-success">Ready</button>
+                <button name="status" value="DELIVERED" class="btn btn-sm btn-secondary">Delivered</button>
+            </form>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

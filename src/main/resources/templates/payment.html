@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>CampusEats - Payment</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container mt-5 text-center">
+    <div class="card shadow mx-auto" style="max-width: 400px;">
+        <div class="card-header bg-dark text-white">
+            <h4>Scan to Pay</h4>
+        </div>
+        <div class="card-body">
+            <h2 class="text-success mb-3" th:text="'Total: ₹' + ${total}"></h2>
+            <p class="text-muted">Scan the QR code below using any UPI app</p>
+
+            <img src="/images/DemoQr.jpeg" class="img-fluid mb-4" alt="Payment QR Code" style="border: 1px solid #ddd; padding: 10px;">
+
+            <form th:action="@{/cart/confirm-payment}" method="post">
+                <button type="submit" class="btn btn-primary btn-lg w-100">I have paid - Place Order</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
