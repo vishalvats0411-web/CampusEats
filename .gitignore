@@ -1,6 +1,10 @@
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
+
+# --- NEW: Ignore the test folder in src ---
+src/test/
+
 !**/src/main/**/target/
 !**/src/test/**/target/
 
