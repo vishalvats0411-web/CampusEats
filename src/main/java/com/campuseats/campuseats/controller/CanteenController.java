@@ -4,7 +4,7 @@ import com.campuseats.campuseats.model.Canteen;
 import com.campuseats.campuseats.model.MenuItem;
 import com.campuseats.campuseats.repository.CanteenRepository;
 import com.campuseats.campuseats.repository.MenuItemRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,13 +14,12 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Controller
+@RequiredArgsConstructor
+
 public class CanteenController {
 
-    @Autowired
-    private CanteenRepository canteenRepository;
-
-    @Autowired
-    private MenuItemRepository menuItemRepository;
+    private final CanteenRepository canteenRepository;
+    private final MenuItemRepository menuItemRepository;
 
     @GetMapping("/canteens")
     public String showCanteens(Model model) {

@@ -9,7 +9,7 @@ import java.util.NoSuchElementException;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(NoSuchElementException.class)
-    public String handleNotFound(NoSuchElementException ex, Model model) {
+    public String handleNotFound(Model model) {
         model.addAttribute("errorMessage", "The requested resource (Canteen, Item, or Order) was not found.");
         return "error"; // Looks for templates/error.html
     }

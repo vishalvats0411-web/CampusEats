@@ -2,7 +2,6 @@ package com.campuseats.campuseats.controller;
 
 import com.campuseats.campuseats.model.Order;
 import com.campuseats.campuseats.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -11,19 +10,16 @@ import com.campuseats.campuseats.repository.MenuItemRepository;
 import com.campuseats.campuseats.repository.CanteenRepository;
 import jakarta.validation.Valid;
 import org.springframework.validation.BindingResult;
+import lombok.RequiredArgsConstructor;
 
 @Controller
 @RequestMapping("/admin")
+@RequiredArgsConstructor
 public class AdminController {
 
-    @Autowired
-    private OrderRepository orderRepository;
-
-    @Autowired
-    private MenuItemRepository menuItemRepository;
-
-    @Autowired
-    private CanteenRepository canteenRepository;
+    private final OrderRepository orderRepository;
+    private final MenuItemRepository menuItemRepository;
+    private final CanteenRepository canteenRepository;
 
     @GetMapping("/add-item")
     public String showAddItemForm(Model model) {
