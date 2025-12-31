@@ -5,6 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 @Entity
 @Table(name = "orders")
@@ -23,8 +24,15 @@ public class Order {
     private double totalAmount;
     private String status;
     private LocalDateTime orderTime;
+    private String otp;
 
     // FIX 2: List of items in this order
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    public void generateOtp() {
+        Random random = new Random();
+        int number = 100000 + random.nextInt(900000);
+        this.otp = String.valueOf(number);
+    }
 }

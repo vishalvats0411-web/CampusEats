@@ -115,6 +115,9 @@ public class CartController {
         order.setStatus("PAID");
         order.setOrderTime(LocalDateTime.now());
 
+        // NEW: Generate OTP
+        order.generateOtp();
+
         double total = 0;
         for (CartItem ci : cart) {
             OrderItem orderItem = new OrderItem(ci.getItemName(), ci.getPrice(), ci.getQuantity(), order);
@@ -126,11 +129,17 @@ public class CartController {
         orderRepository.save(order);
 
         session.removeAttribute("cart");
-        return "redirect:/cart/success";
+        return "redirect:/cart/success?orderId=" + order.getId();
     }
 
     @GetMapping("/success")
-    public String showSuccess() {
+    public String showSuccess(@RequestParam(required = false) Long orderId, Model model) {
+        if (orderId != null) {
+            Order order = orderRepository.findById(orderId).orElse(null);
+            if (order != null) {
+                model.addAttribute("otp", order.getOtp());
+            }
+        }
         return "success";
     }
 

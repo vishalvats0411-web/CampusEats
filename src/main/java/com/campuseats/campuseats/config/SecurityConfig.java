@@ -23,7 +23,16 @@ public class SecurityConfig {
                 .formLogin((form) -> form
                         .loginPage("/login") // Use your custom login.html
                         .usernameParameter("collegeId") // Important: Tell Spring to look for 'collegeId' in the form, not 'username'
-                        .defaultSuccessUrl("/canteens", true) // Redirect here after success
+                        .successHandler((request, response, authentication) -> {
+                            boolean isAdmin = authentication.getAuthorities().stream()
+                                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+                            if (isAdmin) {
+                                response.sendRedirect("/admin/dashboard");
+                            } else {
+                                response.sendRedirect("/canteens");
+                            }
+                        })
                         .permitAll()
                 )
                 .logout((logout) -> logout

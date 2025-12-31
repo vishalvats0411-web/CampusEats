@@ -51,4 +51,19 @@ public class AdminController {
         orderRepository.save(order);
         return "redirect:/admin/dashboard";
     }
+    @PostMapping("/order/{id}/deliver")
+    public String markDelivered(@PathVariable Long id, @RequestParam String otp, Model model) {
+        Order order = orderRepository.findById(id).orElseThrow();
+
+        if (order.getOtp() != null && order.getOtp().equals(otp)) {
+            order.setStatus("DELIVERED");
+            orderRepository.save(order);
+            return "redirect:/admin/dashboard";
+        } else {
+            // Handle incorrect OTP (Reload dashboard with error)
+            model.addAttribute("error", "Invalid OTP for Order #" + id);
+            model.addAttribute("orders", orderRepository.findByStatusNot("DELIVERED"));
+            return "admin/dashboard";
+        }
+    }
 }

@@ -1,8 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <body class="text-center mt-5">
 <h1 class="text-success">Order Placed Successfully! 🎉</h1>
-<p>Head over to the canteen to pick up your food.</p>
+
+<div class="card mx-auto mt-4 p-4 shadow" style="max-width: 300px; border: 2px dashed #28a745;">
+    <h3>Your Pickup OTP</h3>
+    <h1 class="display-4 fw-bold text-dark" th:text="${otp}">123456</h1>
+    <small class="text-muted">Show this to the canteen admin to pick up your order.</small>
+</div>
+
+<p class="mt-4">Head over to the canteen to pick up your food.</p>
 <a href="/canteens" class="btn btn-primary">Order More</a>
 </body>
 </html>

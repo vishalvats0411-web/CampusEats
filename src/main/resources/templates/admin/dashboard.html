@@ -31,11 +31,19 @@
             <span class="badge bg-warning" th:text="${order.status}"></span>
         </td>
         <td>
-            <form th:action="@{/admin/order/{id}/status(id=${order.id})}" method="post" class="d-flex gap-2">
-                <button name="status" value="PREPARING" class="btn btn-sm btn-primary">Prepare</button>
-                <button name="status" value="READY" class="btn btn-sm btn-success">Ready</button>
-                <button name="status" value="DELIVERED" class="btn btn-sm btn-secondary">Delivered</button>
-            </form>
+            <div th:if="${error}" class="alert alert-danger" th:text="${error}"></div>
+
+            <div class="d-flex flex-column gap-2">
+                <form th:action="@{/admin/order/{id}/status(id=${order.id})}" method="post" class="d-flex gap-2">
+                    <button name="status" value="PREPARING" class="btn btn-sm btn-primary">Prepare</button>
+                    <button name="status" value="READY" class="btn btn-sm btn-success">Ready</button>
+                </form>
+
+                <form th:action="@{/admin/order/{id}/deliver(id=${order.id})}" method="post" class="input-group input-group-sm mt-1">
+                    <input type="text" name="otp" class="form-control" placeholder="OTP" required maxlength="6" style="max-width: 80px;">
+                    <button type="submit" class="btn btn-secondary">Deliver</button>
+                </form>
+            </div>
         </td>
     </tr>
     </tbody>
