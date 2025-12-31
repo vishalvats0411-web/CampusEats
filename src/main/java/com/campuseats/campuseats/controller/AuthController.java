@@ -42,11 +42,17 @@ public class AuthController {
 
     @GetMapping("/login")
     public String showLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
-        // If the URL is /login?error, add the error message to the model
         if (error != null) {
-            model.addAttribute("error", "Invalid Credentials. Please try again.");
+            model.addAttribute("error", "Invalid Credentials.");
         }
         return "login";
+    }
+    @GetMapping("/admin/login")
+    public String showAdminLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
+        if (error != null) {
+            model.addAttribute("error", "Access Denied or Invalid Credentials.");
+        }
+        return "admin-login"; // matches template name
     }
 
     // REMOVE the manual @PostMapping("/login") method entirely.

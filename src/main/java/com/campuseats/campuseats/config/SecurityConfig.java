@@ -16,14 +16,16 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/register", "/login", "/css/**", "/js/**", "/images/**").permitAll() // Public pages
+                        // ALLOW ACCESS TO ADMIN LOGIN PAGE
+                        .requestMatchers("/register", "/login", "/admin/login", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .anyRequest().authenticated() // All other pages require login
+                        .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login") // Use your custom login.html
-                        .usernameParameter("collegeId") // Important: Tell Spring to look for 'collegeId' in the form, not 'username'
+                        .loginPage("/login")
+                        .usernameParameter("collegeId")
                         .successHandler((request, response, authentication) -> {
+                            // existing redirect logic works perfectly for both pages
                             boolean isAdmin = authentication.getAuthorities().stream()
                                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 

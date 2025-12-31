@@ -44,18 +44,17 @@ public class DataInitializer {
             }
 
             // 3. Initialize Admin User
-            // FIX: Uses userRepo and passwordEncoder passed in the method arguments above
-            if (!userRepo.existsById("admin")) {
-                User admin = new User();
-                admin.setCollegeId("admin");
-                admin.setName("Admin User");
-                admin.setPassword(passwordEncoder.encode("admin123"));
-                admin.setRole("ROLE_ADMIN");
-                userRepo.save(admin);
-                System.out.println("Admin User Created! (ID: admin, Pass: admin123)");
-            } else {
-                System.out.println("Admin User already exists. Skipping creation.");
-            }
+            // We use findById to get the existing admin or create a new one
+            User admin = userRepo.findById("admin").orElse(new User());
+
+            admin.setCollegeId("admin");
+            admin.setName("Admin User");
+            // Re-encode the password to be safe
+            admin.setPassword(passwordEncoder.encode("admin123"));
+            admin.setRole("ROLE_ADMIN"); // <--- This ensures the role is always correct
+
+            userRepo.save(admin);
+            System.out.println("Admin User Updated Successfully! (ID: admin, Pass: admin123)");
         };
     }
 }
