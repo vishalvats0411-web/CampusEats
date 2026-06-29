@@ -1,11 +1,38 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusEats - Menu</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link th:href="@{/css/style.css}" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="app-body">
+<nav class="app-navbar">
+    <a href="/canteens" class="logo">
+        <img th:src="@{/images/new-logo.png}" alt="CampusEats Logo">
+        CampusEats
+    </a>
+
+    <div class="nav-actions">
+        <a href="/cart/checkout" class="btn-nav-outline">
+            <i class="fa-solid fa-cart-shopping"></i> Cart
+            <span class="cart-badge" th:text="${session.cart != null ? session.cart.size() : 0}">0</span>
+        </a>
+        <a href="/profile" class="btn-nav-outline">
+            <i class="fa-solid fa-user"></i> Profile
+        </a>
+        <a href="/cart/my-orders" class="btn-nav-outline">
+            <i class="fa-solid fa-bag-shopping"></i> My Orders
+        </a>
+        <form th:action="@{/logout}" method="post" style="margin: 0;">
+            <button type="submit" class="btn-nav-outline" style="cursor: pointer;">
+                <i class="fa-solid fa-arrow-right-from-bracket"></i> Logout
+            </button>
+        </form>
+    </div>
+</nav>
+
 <div class="container mt-5 fade-in">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2 class="fw-bold text-dark" th:text="${canteenName} + ' Menu'"></h2>
@@ -15,24 +42,93 @@
         </div>
     </div>
 
+    <div class="row mb-4">
+        <div class="col-md-6 mb-2">
+            <form th:action="@{/menu}" method="get" class="d-flex">
+                <input type="hidden" name="name" th:value="${canteenName}">
+                <input class="form-control rounded-pill me-2" type="search" name="search" placeholder="Search dishes..." aria-label="Search">
+                <button class="btn btn-outline-primary rounded-pill" type="submit">Search</button>
+            </form>
+        </div>
+        <div class="col-md-6 text-md-end">
+            <a th:href="@{/menu(name=${canteenName})}" class="btn btn-sm btn-outline-secondary rounded-pill mb-1">All</a>
+            <a th:href="@{/menu(name=${canteenName}, category='Breakfast')}" class="btn btn-sm btn-outline-success rounded-pill mb-1">Breakfast</a>
+            <a th:href="@{/menu(name=${canteenName}, category='Lunch')}" class="btn btn-sm btn-outline-warning rounded-pill mb-1">Lunch</a>
+            <a th:href="@{/menu(name=${canteenName}, category='Beverages')}" class="btn btn-sm btn-outline-info rounded-pill mb-1">Beverages</a>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col-md-4 mb-4" th:each="item : ${menuItems}">
-            <div class="card h-100">
+            <div class="card h-100 shadow-sm border-0">
+                <img th:if="${item.imageUrl != null and !item.imageUrl.isEmpty()}"
+                     th:src="${item.imageUrl}" class="card-img-top" alt="Food Image" style="height: 200px; object-fit: cover;">
+                <div th:unless="${item.imageUrl != null and !item.imageUrl.isEmpty()}"
+                     class="bg-secondary text-white d-flex align-items-center justify-content-center" style="height: 200px;">
+                    <span>No Image Available</span>
+                </div>
                 <div class="card-body d-flex flex-column">
                     <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title fw-bold" th:text="${item.name}"></h5>
+                        <h5 class="card-title fw-bold text-primary" th:text="${item.name}"></h5>
                         <span class="badge bg-success rounded-pill" th:text="'₹' + ${item.price}"></span>
                     </div>
-                    <p class="text-muted small mb-4">Delicious and freshly prepared.</p>
+                    <p class="text-muted small mb-4" th:text="${item.description}">Delicious and freshly prepared.</p>
 
                     <form th:action="@{/cart/add}" method="post" class="mt-auto">
                         <input type="hidden" name="itemId" th:value="${item.id}">
-                        <button type="submit" class="btn btn-primary w-100">Add +</button>
+                        <button type="submit" class="btn btn-add-cart w-100 rounded-pill">Add to Cart</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="canteenMismatchModal" tabindex="-1" aria-labelledby="canteenMismatchLabel" aria-hidden="true" th:if="${canteenMismatch}">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header bg-warning text-dark">
+                <h5 class="modal-title fw-bold" id="canteenMismatchLabel">⚠️ Clear Cart?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Your cart currently contains items from <strong class="text-danger" th:text="${existingCanteen}"></strong>. <br><br>
+                Adding an item from <strong class="text-primary" th:text="${newCanteen}"></strong> will clear your current cart. Do you want to proceed?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                <form th:action="@{/cart/add}" method="post" class="m-0">
+                    <input type="hidden" name="itemId" th:value="${pendingItemId}">
+                    <input type="hidden" name="forceClear" value="true">
+                    <button type="submit" class="btn btn-danger rounded-pill">Yes, Clear Cart</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+    <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true" th:if="${toastMessage}">
+        <div class="d-flex">
+            <div class="toast-body fw-bold text-white" th:text="${toastMessage}"></div>
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script th:if="${canteenMismatch}">
+    document.addEventListener("DOMContentLoaded", function() {
+        var mismatchModal = new bootstrap.Modal(document.getElementById('canteenMismatchModal'));
+        mismatchModal.show();
+    });
+</script>
+<script th:if="${toastMessage}">
+    document.addEventListener("DOMContentLoaded", function() {
+        var toastElement = document.getElementById('cartToast');
+        var toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+        toast.show();
+    });
+</script>
 </body>
 </html>

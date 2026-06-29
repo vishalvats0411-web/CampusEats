@@ -1,46 +1,109 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CampusEats - Register</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
-<body class="bg-light">
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-4">
-            <div class="card shadow">
-                <div class="card-header bg-primary text-white text-center">
-                    <h3>CampusEats Register</h3>
-                </div>
-                <div class="card-body">
-                    <form th:action="@{/register}" th:object="${user}" method="post">
+<body class="modern-auth-body">
 
-                        <div class="mb-3">
-                            <label class="form-label" for="name">Name</label>
-                            <input type="text" id="name" th:field="*{name}" class="form-control" placeholder="Full Name">
-                            <div class="text-danger" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
-                        </div>
+<div class="auth-card">
 
-                        <div class="mb-3">
-                            <label class="form-label" for="collegeId">College ID</label>
-                            <input type="text" id="collegeId" th:field="*{collegeId}" class="form-control" placeholder="e.g. 12345">
-                            <div class="text-danger" th:if="${#fields.hasErrors('collegeId')}" th:errors="*{collegeId}"></div>
-                        </div>
+    <div class="auth-left">
+        <div class="dot-pattern"></div>
 
-                        <div class="mb-3">
-                            <label class="form-label" for="password">Password</label>
-                            <input type="password" id="password" th:field="*{password}" class="form-control" placeholder="Create Password">
-                            <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
-                        </div>
+        <div class="auth-logo">
+            <img th:src="@{/images/new-logo.png}" alt="Logo" style="width: 45px; height: auto;">
+            <span class="logo-text">CampusEats</span>
+        </div>
 
-                        <button type="submit" class="btn btn-primary w-100">Sign Up</button>
-                    </form>
-                    <hr>
-                    <p class="text-center">Already have an account? <a href="/login">Login here</a></p>
-                </div>
-            </div>
+        <h1 class="auth-heading">Good Food.<br><span class="text-green">Great Campus.</span></h1>
+        <p class="auth-subheading">Order your favorite meals from your<br>classroom canteen in just a few clicks.</p>
+
+        <div class="bottom-left-image">
+            <img th:src="@{/images/your-second-image (2).png}" alt="Bottom Image" width="80%">
+        </div>
+    </div> <div class="auth-right">
+
+    <div class="form-header">
+        <div class="header-icon">
+            <i class="fa-solid fa-user-plus"></i>
+        </div>
+        <div class="header-text">
+            <h2>Create your account</h2>
+            <p>Join CampusEats and start ordering now!</p>
         </div>
     </div>
+
+    <div th:if="${error}" class="auth-alert-banner error-banner" th:text="${error}">
+        Registration Exception Message placeholder
+    </div>
+
+    <form th:action="@{/register}" th:object="${user}" method="post">
+
+        <div class="input-group">
+            <label for="collegeId">COLLEGE ID / ROLL NUMBER</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-graduation-cap input-icon"></i>
+                <input type="text" id="collegeId" th:field="*{collegeId}" placeholder="e.g. 2000123" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="name">FULL NAME</label>
+            <div class="input-wrapper">
+                <i class="fa-regular fa-user input-icon"></i>
+                <input type="text" id="name" th:field="*{name}" placeholder="e.g. Vishal Kumar" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="email">COLLEGE EMAIL ADDRESS</label>
+            <div class="input-wrapper">
+                <i class="fa-regular fa-envelope input-icon"></i>
+                <input type="email" id="email" name="email" placeholder="e.g. vishal.kumar@college.edu" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="password">PASSWORD</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="password" th:field="*{password}" placeholder="Create a strong password" required>
+            </div>
+        </div>
+
+        <div class="input-group">
+            <label for="confirmPassword">CONFIRM PASSWORD</label>
+            <div class="input-wrapper">
+                <i class="fa-solid fa-lock input-icon"></i>
+                <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Confirm your password" required>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-primary">
+            <i class="fa-solid fa-user-plus"></i> Sign Up
+        </button>
+
+        <p class="auth-footer-text">
+            Already have an account? <a th:href="@{/login}" class="text-green fw-600">Login</a>
+        </p>
+
+        <div class="divider">
+            <span>OR</span>
+        </div>
+
+        <a th:href="@{/admin-login}" class="btn-outline text-decoration-none">
+            <i class="fa-solid fa-user-shield"></i> Admin Access
+        </a>
+
+    </form>
 </div>
+
+</div>
+
 </body>
 </html>

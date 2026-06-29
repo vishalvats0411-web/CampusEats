@@ -1,4 +1,4 @@
-package com.campuseats.campuseats; // FIXED PACKAGE NAME
+package com.campuseats.campuseats;
 
 import com.campuseats.campuseats.model.Canteen;
 import com.campuseats.campuseats.model.MenuItem;
@@ -9,21 +9,26 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.beans.factory.annotation.Value;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 public class DataInitializer {
 
+    @Value("${app.admin.default-password}")
+    private String adminPassword;
+
     @Bean
     CommandLineRunner initData(UserRepository userRepository, CanteenRepository canteenRepository, PasswordEncoder passwordEncoder) {
         return args -> {
-            // 1. Initialize Admin User
             if (!userRepository.existsById("admin")) {
                 User admin = new User();
                 admin.setCollegeId("admin");
-                admin.setPassword(passwordEncoder.encode("admin123"));
+                // Use the injected variable, not a hardcoded string
+                admin.setPassword(passwordEncoder.encode(adminPassword));
                 admin.setName("System Administrator");
                 admin.setRole("ROLE_ADMIN");
                 userRepository.save(admin);
@@ -37,14 +42,14 @@ public class DataInitializer {
                 // --- RAVI CANTEEN ---
                 Canteen ravi = new Canteen();
                 ravi.setName("Ravi Canteen");
-                ravi.setDescription("Best South Indian Breakfast.");
+                ravi.setDescription("");
                 ravi.setLocation("Near Block A");
-                ravi.setImageUrl("/images/canteen1.jpg");
+                ravi.setImageUrl("/images/ravi.jpg");
 
                 List<MenuItem> raviItems = new ArrayList<>();
-                raviItems.add(createItem("Masala Dosa", 60.0, "Ravi Canteen", "Crispy spiced crepe.", "/images/dosa.jpg", "Breakfast"));
-                raviItems.add(createItem("Idli Sambar", 40.0, "Ravi Canteen", "Steamed rice cakes.", "/images/idli.jpg", "Breakfast"));
-                raviItems.add(createItem("Samosa", 15.0, "Ravi Canteen", "Potato stuffed pastry.", "/images/samosa.jpg", "Snacks"));
+                raviItems.add(createItem("Masala Dosa", new BigDecimal("60.00"), "Ravi Canteen", "Crispy spiced crepe.", "/images/dosa.jpg", "Breakfast"));
+                raviItems.add(createItem("Idli Sambar", new BigDecimal("40.00"), "Ravi Canteen", "Steamed rice cakes.", "/images/idli.jpg", "Breakfast"));
+                raviItems.add(createItem("Samosa", new BigDecimal("15.00"), "Ravi Canteen", "Potato stuffed pastry.", "/images/samosa.jpg", "Snacks"));
 
                 ravi.setMenuItems(raviItems);
                 canteenRepository.save(ravi);
@@ -54,11 +59,11 @@ public class DataInitializer {
                 qbc.setName("QBC");
                 qbc.setDescription("Burgers and Fast Food.");
                 qbc.setLocation("Student Centre");
-                qbc.setImageUrl("/images/canteen2.jpg");
+                qbc.setImageUrl("/images/qbc.jpg");
 
                 List<MenuItem> qbcItems = new ArrayList<>();
-                qbcItems.add(createItem("Veg Burger", 45.0, "QBC", "Grilled veg patty.", "/images/burger.jpg", "Fast Food"));
-                qbcItems.add(createItem("Cold Coffee", 40.0, "QBC", "Chilled creamy coffee.", "/images/coffee.jpg", "Beverages"));
+                qbcItems.add(createItem("Veg Burger", new BigDecimal("45.00"), "QBC", "Grilled veg patty.", "/images/burger.jpg", "Fast Food"));
+                qbcItems.add(createItem("Cold Coffee", new BigDecimal("60.00"), "QBC", "Chilled creamy coffee.", "/images/coffee.jpg", "Beverages"));
 
                 qbc.setMenuItems(qbcItems);
                 canteenRepository.save(qbc);
@@ -68,11 +73,11 @@ public class DataInitializer {
                 gate1.setName("Gate 1 Canteen");
                 gate1.setDescription("Chinese and Rice.");
                 gate1.setLocation("Main Gate");
-                gate1.setImageUrl("/images/canteen3.jpg");
+                gate1.setImageUrl("/images/gate 1.jpg");
 
                 List<MenuItem> gate1Items = new ArrayList<>();
-                gate1Items.add(createItem("Fried Rice", 70.0, "Gate 1 Canteen", "Wok tossed rice.", "/images/friedrice.jpg", "Lunch"));
-                gate1Items.add(createItem("Hakka Noodles", 65.0, "Gate 1 Canteen", "Spicy noodles.", "/images/noodles.jpg", "Lunch"));
+                gate1Items.add(createItem("Fried Rice", new BigDecimal("70.00"), "Gate 1 Canteen", "Wok tossed rice.", "/images/friedrice.jpg", "Lunch"));
+                gate1Items.add(createItem("Hakka Noodles", new BigDecimal("65.00"), "Gate 1 Canteen", "Spicy noodles.", "/images/noodles.jpg", "Lunch"));
 
                 gate1.setMenuItems(gate1Items);
                 canteenRepository.save(gate1);
@@ -82,7 +87,7 @@ public class DataInitializer {
         };
     }
 
-    private MenuItem createItem(String name, Double price, String canteenName, String desc, String img, String cat) {
+    private MenuItem createItem(String name, BigDecimal price, String canteenName, String desc, String img, String cat) {
         return new MenuItem(name, price, canteenName, desc, img, cat);
     }
 }

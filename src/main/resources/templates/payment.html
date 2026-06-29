@@ -4,23 +4,70 @@
     <title>CampusEats - Payment</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-light">
+<body class="app-body">
 <div class="container mt-5 text-center">
     <div class="card shadow mx-auto" style="max-width: 400px;">
         <div class="card-header bg-dark text-white">
-            <h4>Scan to Pay</h4>
+            <h4>Secure Checkout</h4>
         </div>
         <div class="card-body">
             <h2 class="text-success mb-3" th:text="'Total: ₹' + ${total}"></h2>
-            <p class="text-muted">Scan the QR code below using any UPI app</p>
+            <p class="text-muted mb-4">Pay securely using Razorpay (UPI, Cards, NetBanking)</p>
 
-            <img src="/images/DemoQr.jpeg" class="img-fluid mb-4" alt="Payment QR Code" style="border: 1px solid #ddd; padding: 10px;">
+            <form th:action="@{/cart/verify-payment}" method="POST" id="razorpay-form">
+                <input type="hidden" name="local_order_id" th:value="${localOrderId}">
 
-            <form th:action="@{/cart/confirm-payment}" method="post">
-                <button type="submit" class="btn btn-primary btn-lg w-100">I have paid - Place Order</button>
+                <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
+                <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+
+                <button type="button" class="btn btn-primary btn-lg w-100" id="rzp-button1">Pay Now</button>
             </form>
+
+            <div class="mt-3">
+                <a href="/cart/checkout" class="text-decoration-none text-muted small">← Cancel and return to cart</a>
+            </div>
         </div>
     </div>
 </div>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script th:inline="javascript">
+    var options = {
+        "key": [[${keyId}]], // Passed from your application.properties via the controller
+        "amount": [[${total}]] * 100, // Amount is in currency subunits (paise)
+        "currency": "INR",
+        "name": "CampusEats",
+        "description": "Canteen Order Transaction",
+        "image": "https://cdn-icons-png.flaticon.com/512/3075/3075977.png", // Optional: Add a logo icon here
+        "order_id": [[${razorpayOrderId}]], // Passes the Razorpay Order ID created by the backend
+        "handler": function (response){
+            // This function runs automatically when the payment is successful
+            document.getElementById('razorpay_payment_id').value = response.razorpay_payment_id;
+            document.getElementById('razorpay_signature').value = response.razorpay_signature;
+
+            // Submit the form to your backend for verification
+            document.getElementById('razorpay-form').submit();
+        },
+        "prefill": {
+            "name": "CampusEats Student" // You can pass actual user details here if you query them
+        },
+        "theme": {
+            "color": "#ff6b6b" // Matches the primary color from your style.css
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    // Handle payment failure gracefully
+    rzp1.on('payment.failed', function (response){
+        alert("Payment failed! Reason: " + response.error.description);
+    });
+
+    // Open the Razorpay modal when the button is clicked
+    document.getElementById('rzp-button1').onclick = function(e){
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
 </body>
 </html>

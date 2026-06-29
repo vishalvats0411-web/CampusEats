@@ -5,7 +5,7 @@ import com.campuseats.campuseats.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model; // Ensure Model is imported
+import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,14 +27,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public String registerUser(@Valid User user, BindingResult result) {
-        // 1. Check for validation errors (e.g., blank name, short password)
         if (result.hasErrors()) {
-            return "register"; // Return to the form to show errors
+            return "register";
         }
 
-        // 2. Hash password and save
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setRole("ROLE_USER"); // Default role
+        user.setRole("ROLE_USER");
         userRepository.save(user);
 
         return "redirect:/login?success";
@@ -47,14 +45,17 @@ public class AuthController {
         }
         return "login";
     }
-    @GetMapping("/admin/login")
+
+    // FIXED: Changed mapping to "/admin-login" to perfectly match your HTML template link
+    @GetMapping("/admin-login")
     public String showAdminLoginForm(@RequestParam(value = "error", required = false) String error, Model model) {
         if (error != null) {
             model.addAttribute("error", "Access Denied or Invalid Credentials.");
         }
-        return "admin-login"; // matches template name
+        return "admin-login";
     }
-
-    // REMOVE the manual @PostMapping("/login") method entirely.
-    // Spring Security now handles authentication automatically.
+    @GetMapping("/")
+    public String showLandingPage() {
+        return "index";
+    }
 }

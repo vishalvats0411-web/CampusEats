@@ -2,7 +2,7 @@ package com.campuseats.campuseats.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
+import java.math.BigDecimal;
 @Entity
 @Table(name = "order_items")
 @Data
@@ -12,7 +12,7 @@ public class OrderItem {
     private Long id;
 
     private String itemName;
-    private double price; // Price at the time of purchase
+    private BigDecimal price; // Price at the time of purchase
     private int quantity;
 
     @ManyToOne
@@ -22,7 +22,7 @@ public class OrderItem {
     // Constructors
     public OrderItem() {}
 
-    public OrderItem(String itemName, double price, int quantity, Order order) {
+    public OrderItem(String itemName, BigDecimal price, int quantity, Order order) {
         this.itemName = itemName;
         this.price = price;
         this.quantity = quantity;

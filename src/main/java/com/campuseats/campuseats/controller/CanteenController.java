@@ -23,22 +23,31 @@ public class CanteenController {
 
     @GetMapping("/canteens")
     public String showCanteens(Model model) {
-        // FETCH from Database
+        // FETCH all Canteen objects from Database
         List<Canteen> canteenList = canteenRepository.findAll();
 
-        // Extract just the names to match your current Thymeleaf template expectation
-        // Or update the template to use Canteen objects directly (Better approach)
-        List<String> canteenNames = canteenList.stream()
-                .map(Canteen::getName)
-                .collect(Collectors.toList());
-
-        model.addAttribute("canteens", canteenNames);
+        // Pass the FULL objects to the template, not just the names
+        model.addAttribute("canteens", canteenList);
         return "canteens";
     }
 
     @GetMapping("/menu")
-    public String showMenu(@RequestParam("name") String canteenName, Model model) {
-        List<MenuItem> items = menuItemRepository.findByCanteenName(canteenName);
+    public String showMenu(
+            @RequestParam("name") String canteenName,
+            @RequestParam(value = "search", required = false) String search,
+            @RequestParam(value = "category", required = false) String category,
+            Model model) {
+
+        List<MenuItem> items;
+
+        if (search != null && !search.isEmpty()) {
+            items = menuItemRepository.findByCanteenNameAndNameContainingIgnoreCase(canteenName, search);
+        } else if (category != null && !category.isEmpty()) {
+            items = menuItemRepository.findByCanteenNameAndCategory(canteenName, category);
+        } else {
+            items = menuItemRepository.findByCanteenName(canteenName);
+        }
+
         model.addAttribute("canteenName", canteenName);
         model.addAttribute("menuItems", items);
         return "menu";

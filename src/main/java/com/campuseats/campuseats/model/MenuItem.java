@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
+import java.math.BigDecimal;
 
 @Entity
 @Table(name = "menu_items")
@@ -12,12 +13,13 @@ public class MenuItem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private boolean available = true;
 
     @NotBlank(message = "Item name is required")
     private String name;
 
     @Positive(message = "Price must be greater than zero")
-    private double price;
+    private BigDecimal price;
 
     @NotBlank(message = "Canteen name is required")
     private String canteenName;
@@ -33,7 +35,7 @@ public class MenuItem {
     public MenuItem() {}
 
     // Updated Constructor
-    public MenuItem(String name, double price, String canteenName, String description, String imageUrl, String category) {
+    public MenuItem(String name, BigDecimal price, String canteenName, String description, String imageUrl, String category) {
         this.name = name;
         this.price = price;
         this.canteenName = canteenName;
@@ -43,7 +45,7 @@ public class MenuItem {
     }
 
     // Old Constructor for backward compatibility (optional)
-    public MenuItem(String name, double price, String canteenName) {
+    public MenuItem(String name, BigDecimal price, String canteenName) {
         this.name = name;
         this.price = price;
         this.canteenName = canteenName;

@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusEats - Smart Campus Dining</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+
+    <style>
+        .landing-hero {
+            padding: 80px 20px;
+            text-align: center;
+        }
+        .landing-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .landing-hero h1 span {
+            color: var(--brand-green);
+        }
+        .feature-box {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            height: 100%;
+            transition: transform 0.3s ease;
+        }
+        .feature-box:hover {
+            transform: translateY(-5px);
+        }
+        .dev-section {
+            background: var(--nav-bg);
+            color: white;
+            padding: 60px 20px;
+            border-radius: 20px;
+            margin-top: 60px;
+        }
+        .dev-socials a {
+            color: white;
+            font-size: 1.5rem;
+            margin: 0 10px;
+            transition: color 0.2s;
+        }
+        .dev-socials a:hover {
+            color: var(--brand-green);
+        }
+    </style>
+</head>
+<body class="app-body">
+
+<nav class="app-navbar">
+    <a href="/" class="logo">
+        <img th:src="@{/images/new-logo.png}" alt="CampusEats Logo">
+        CampusEats
+    </a>
+    <div class="nav-actions">
+        <a href="/login" class="btn btn-success fw-bold rounded-pill px-4">Sign In</a>
+    </div>
+</nav>
+
+<div class="container mb-5">
+
+    <div class="landing-hero">
+        <h1>Skip the line. <br><span>Enjoy your break.</span></h1>
+        <p class="text-muted fs-5 mt-3 mb-5 mx-auto" style="max-width: 600px;">
+            A smart, full-stack canteen logistics platform designed to digitize food ordering, reduce wait times, and streamline operations across campus.
+        </p>
+        <a href="/login" class="btn btn-success btn-lg rounded-pill px-5 shadow-sm fw-bold">Order Food Now</a>
+    </div>
+
+    <div class="row g-4 mt-2">
+        <div class="col-md-4">
+            <div class="feature-box text-center">
+                <i class="fa-solid fa-clock-rotate-left fa-3x text-success mb-3"></i>
+                <h4 class="fw-bold">Save Time</h4>
+                <p class="text-muted">No more wasting your short breaks standing in long queues. Order ahead and pick up exactly when it's ready.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box text-center">
+                <i class="fa-solid fa-store fa-3x text-warning mb-3"></i>
+                <h4 class="fw-bold">Unified Menus</h4>
+                <p class="text-muted">Browse every campus outlet from one place. Whether you want South Indian, Chinese, or just a quick coffee.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="feature-box text-center">
+                <i class="fa-solid fa-shield fa-3x text-primary mb-3"></i>
+                <h4 class="fw-bold">Secure Pickup</h4>
+                <p class="text-muted">Integrated with Razorpay for cashless transactions and secured with an OTP-based delivery system.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Developer Section -->
+    <div class="dev-section shadow-lg p-5">
+        <div class="row align-items-center">
+
+            <!-- Left Column: Circular Photo -->
+            <div class="col-md-4 text-center mb-4 mb-md-0">
+                <!-- Replace 'profile.jpg' with your actual image filename -->
+                <img th:src="@{/images/profile.png}" alt="Vishal Kumar Vats"
+                     class="rounded-circle img-fluid border border-4 border-success shadow"
+                     style="width: 220px; height: 220px; object-fit: cover;">
+            </div>
+
+            <!-- Right Column: Left-Aligned Text -->
+            <div class="col-md-8 text-start ps-md-4">
+                <h2 class="fw-bold mb-3">About the Developer</h2>
+                <h3 class="fw-bold text-success">Vishal Kumar Vats</h3>
+                <p class="fs-5 mb-1">Computer Science & Engineering Student</p>
+                <p class="text-light mb-4">Graphic Era Deemed University</p>
+
+                <p class="text-light" style="opacity: 0.9; line-height: 1.6; max-width: 600px;">
+                    I built CampusEats using Java, Spring Boot, and MySQL to solve a real logistics problem I observed on campus. The goal was to create a scalable architecture that benefits both hungry students and busy canteen administrators.
+                </p>
+
+                <div class="dev-socials mt-4 d-flex gap-3">
+                    <a href="https://www.linkedin.com/in/vishalkumarvats" target="_blank" title="LinkedIn"><i class="fa-brands fa-linkedin"></i></a>
+                    <a href="https://github.com/Vishalvats0411" target="_blank" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                    <a href="mailto:vishalvats2026@gmail.com" title="Email Me"><i class="fa-solid fa-envelope"></i></a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

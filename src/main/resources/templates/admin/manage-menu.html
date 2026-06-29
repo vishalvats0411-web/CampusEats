@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Menu</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container mt-5 mb-5">
+  <div class="d-flex flex-column flex-md-row justify-content-between mb-4 gap-2">
+    <h2 class="fw-bold text-dark">Manage Menu & Canteens</h2>
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="/admin/add-canteen" class="btn btn-warning shadow-sm">Reference New Canteen</a>
+      <a href="/admin/add-item" class="btn btn-success shadow-sm">Add New Dish</a>
+      <a href="/admin/dashboard" class="btn btn-secondary shadow-sm">Back to Dashboard</a>
+      <form th:action="@{/logout}" method="post" class="m-0">
+        <button type="submit" class="btn btn-danger fw-bold shadow-sm">Logout</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-5 border-0">
+    <div class="card-header bg-white text-primary fw-bold">Existing Canteens</div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <tbody>
+          <tr th:each="canteen : ${canteens}">
+            <td class="align-middle fw-bold ps-4" th:text="${canteen.name}"></td>
+            <td class="text-end pe-4">
+              <form th:action="@{/admin/canteen/{id}/delete(id=${canteen.id})}" method="post"
+                    onsubmit="return confirm('Delete this canteen and all its food?');" class="m-0">
+                <button class="btn btn-danger btn-sm rounded-pill">Delete Canteen</button>
+              </form>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm border-0">
+    <div class="card-header bg-white text-primary fw-bold">All Menu Items</div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-striped table-hover mb-0">
+          <thead class="table-light">
+          <tr>
+            <th class="ps-4">Item</th>
+            <th>Canteen</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th class="pe-4">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="item : ${menuItems}">
+            <td class="align-middle fw-bold ps-4" th:text="${item.name}"></td>
+            <td class="align-middle" th:text="${item.canteenName}"></td>
+            <td class="align-middle" th:text="'₹' + ${item.price}"></td>
+            <td class="align-middle">
+              <span th:if="${item.available}" class="badge bg-success">In Stock</span>
+              <span th:unless="${item.available}" class="badge bg-danger">Out of Stock</span>
+            </td>
+            <td class="pe-4">
+              <div class="d-flex gap-2">
+                <form th:action="@{/admin/item/{id}/toggle(id=${item.id})}" method="post" class="m-0">
+                  <button class="btn btn-sm btn-outline-primary rounded-pill">Toggle Stock</button>
+                </form>
+                <form th:action="@{/admin/item/{id}/delete(id=${item.id})}" method="post"
+                      onsubmit="return confirm('Are you sure?');" class="m-0">
+                  <button class="btn btn-sm btn-outline-danger rounded-pill">Delete</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

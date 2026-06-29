@@ -5,6 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
-    // Custom query to find items belonging to a specific canteen
     List<MenuItem> findByCanteenName(String canteenName);
+
+    // NEW: Search by keyword and category
+    List<MenuItem> findByCanteenNameAndNameContainingIgnoreCase(String canteenName, String keyword);
+    List<MenuItem> findByCanteenNameAndCategory(String canteenName, String category);
 }

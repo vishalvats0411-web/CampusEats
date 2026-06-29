@@ -13,19 +13,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 public class SecurityConfig {
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        // ALLOW ACCESS TO ADMIN LOGIN PAGE
-                        .requestMatchers("/register", "/login", "/admin/login", "/css/**", "/js/**", "/images/**").permitAll()
+                        // FIXED: Changed "/admin/login" to "/admin-login" to match your HTML button
+                        .requestMatchers("/", "/register", "/login", "/admin-login", "/css/**", "/js/**", "/images/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .formLogin((form) -> form
                         .loginPage("/login")
-                        .usernameParameter("collegeId")
+                        // FIXED: Changed to "username" to match the HTML <input name="username"> attribute
+                        .usernameParameter("username")
                         .successHandler((request, response, authentication) -> {
-                            // existing redirect logic works perfectly for both pages
                             boolean isAdmin = authentication.getAuthorities().stream()
                                     .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
 
@@ -47,6 +47,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Use BCrypt for hashing
+        return new BCryptPasswordEncoder();
     }
 }
