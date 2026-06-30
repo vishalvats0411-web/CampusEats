@@ -750,3 +750,62 @@ body.modern-auth-body {
 body.app-body {
     background-color: #f0f7f2 !important;
 }
+
+/* =========================================================
+   MOBILE RESPONSIVENESS FIXES
+========================================================= */
+@media (max-width: 768px) {
+
+    /* 1. Fix the Navbar */
+    .app-navbar {
+        padding: 15px 20px; /* Reduce side padding */
+    }
+
+    .app-navbar .logo {
+        font-size: 1.2rem; /* Make logo text slightly smaller */
+    }
+
+    /* 2. Fix the Landing Page Hero Section */
+    .landing-hero {
+        padding: 40px 15px; /* Reduce top/bottom padding */
+    }
+
+    .landing-hero h1 {
+        font-size: 2.2rem !important; /* Scale down the giant heading */
+    }
+
+    .landing-hero p {
+        font-size: 1rem !important; /* Scale down the subtitle */
+    }
+
+    /* 3. Fix the Developer Section Layout */
+    .dev-section {
+        padding: 40px 20px !important;
+        margin-top: 30px;
+    }
+
+    /* Force text to center on mobile underneath the circular image */
+    .dev-section .text-start {
+        text-align: center !important;
+        padding-left: 0 !important;
+    }
+
+    /* Center the social media icons on mobile */
+    .dev-socials {
+        justify-content: center !important;
+    }
+
+    /* 4. Fix Canteen Grid (if viewing the canteen page on mobile) */
+    .canteen-card {
+        min-width: 100%; /* Forces cards to take full width instead of overflowing */
+        margin-bottom: 20px;
+    }
+}
+
+/* For extremely small phones (like older iPhones) */
+@media (max-width: 480px) {
+    .app-navbar {
+        flex-direction: column; /* Stack logo and button on tiny screens */
+        gap: 15px;
+    }
+}
