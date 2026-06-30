@@ -750,62 +750,51 @@ body.modern-auth-body {
 body.app-body {
     background-color: #f0f7f2 !important;
 }
-
 /* =========================================================
-   MOBILE RESPONSIVENESS FIXES
+   ENHANCED MOBILE RESPONSIVENESS FIXES
 ========================================================= */
-@media (max-width: 768px) {
-
-    /* 1. Fix the Navbar */
-    .app-navbar {
-        padding: 15px 20px; /* Reduce side padding */
+@media (max-width: 820px) {
+    /* --- Auth Pages (Login/Register) --- */
+    .auth-card {
+        width: 95%; /* Expands the card to use the full mobile screen */
+        flex-direction: column;
+        height: auto;
+        margin: 20px auto;
     }
 
-    .app-navbar .logo {
-        font-size: 1.2rem; /* Make logo text slightly smaller */
+    .auth-left {
+        flex: 1;
+        width: 100%;
+        min-width: 0 !important; /* Kills the hardcoded 300px desktop width */
+        padding: 30px 20px;
+        box-sizing: border-box;
     }
 
-    /* 2. Fix the Landing Page Hero Section */
-    .landing-hero {
-        padding: 40px 15px; /* Reduce top/bottom padding */
+    .auth-right {
+        flex: 1;
+        width: 100%;
+        min-width: 0 !important; /* Kills the hardcoded 350px desktop width */
+        padding: 30px 20px !important; /* Reduces padding to fit mobile */
+        box-sizing: border-box;
     }
 
-    .landing-hero h1 {
-        font-size: 2.2rem !important; /* Scale down the giant heading */
+    .auth-heading {
+        font-size: 2rem !important; /* Prevents giant text from breaking layout */
     }
 
-    .landing-hero p {
-        font-size: 1rem !important; /* Scale down the subtitle */
+    /* Hide decorative elements on mobile to save vertical space */
+    .hero-graphic, .bottom-images-container, .leaf-1, .leaf-2, .dot-pattern {
+        display: none !important;
     }
 
-    /* 3. Fix the Developer Section Layout */
-    .dev-section {
-        padding: 40px 20px !important;
-        margin-top: 30px;
-    }
-
-    /* Force text to center on mobile underneath the circular image */
-    .dev-section .text-start {
-        text-align: center !important;
-        padding-left: 0 !important;
-    }
-
-    /* Center the social media icons on mobile */
-    .dev-socials {
-        justify-content: center !important;
-    }
-
-    /* 4. Fix Canteen Grid (if viewing the canteen page on mobile) */
+    /* --- General App & Menu Elements --- */
     .canteen-card {
-        min-width: 100%; /* Forces cards to take full width instead of overflowing */
+        min-width: 100% !important; /* Forces cards into a single neat column */
         margin-bottom: 20px;
     }
-}
 
-/* For extremely small phones (like older iPhones) */
-@media (max-width: 480px) {
-    .app-navbar {
-        flex-direction: column; /* Stack logo and button on tiny screens */
-        gap: 15px;
+    /* Fix horizontal scrolling issues on body */
+    body {
+        overflow-x: hidden;
     }
-}
+}}
